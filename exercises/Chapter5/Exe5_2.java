@@ -1,6 +1,6 @@
 package exercises.Chapter5;
 /* Question E5.2 :
-Write a program in Java for a beginner that reads a floating-point number.
+Write a program that reads a floating-point number.
 prints “zero” if the number is zero.
 Otherwise, print “positive” or “negative”.
 Add “small” if the absolute value of the number is less than 1,
