@@ -9,7 +9,7 @@ public class Main_EX2_PM_1_1 {
 
         int k = scanner.nextInt();
         int i = k + 2;
-        if (k <=1 0) {
+        if (k <= 0) {
             System.out.println("Invalid number");
         } else {
             for (int r = 1; r <= i; r++) {//for row
