@@ -1,4 +1,4 @@
-package exercises.Chapter5;
+package ap.exercises.ex1.Chapter5;
 /* Question E5.2 :
 Write a program that reads a floating-point number.
 prints “zero” if the number is zero.
@@ -8,7 +8,7 @@ or “large” if it exceeds 1,000,000.
  */
 import java.util.Scanner;
 
-public class Exe5_2 {
+public class Main_EX1_E5_2 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("enter a a floating-point number: ");

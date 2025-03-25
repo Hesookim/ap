@@ -1,7 +1,7 @@
-package exercises.Chapter6;
+package ap.exercises.ex1.Chapter6;
 
 import java.util.Scanner;
-public class Exe6_2 {
+public class Main_EX1_E6_2 {
     public static void main(String[] args) {
         Scanner inputScanner = new Scanner(System.in);
         int minValue = Integer.MAX_VALUE;

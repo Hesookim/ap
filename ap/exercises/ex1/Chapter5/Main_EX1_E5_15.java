@@ -1,4 +1,4 @@
-package exercises.Chapter5;
+package ap.exercises.ex1.Chapter5;
 /*Question 5.15 :
 The original U.S. income tax of 1913 was quite simple.
 The tax was • 1 percent on the first $50,000. • 2 percent on the amount over $50,000 up to $75,000
@@ -8,7 +8,7 @@ There was no separate schedule for single or married taxpayers.
 */
 import java.util.Scanner;
 
-public class Exe5_15 {
+public class Main_EX1_E5_15 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter your income: ");

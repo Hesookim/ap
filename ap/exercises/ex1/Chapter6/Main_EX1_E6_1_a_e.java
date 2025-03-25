@@ -1,4 +1,4 @@
-package exercises.Chapter6;
+package ap.exercises.ex1.Chapter6;
 /*Question 6.1{a, e} :
 Write programs with loops that compute.
  a)The sum of all even numbers between 2 and 100 (inclusive).
@@ -8,7 +8,7 @@ Write programs with loops that compute.
 
 import java.util.Scanner;
 
-public class Exe6_1_a_e {
+public class Main_EX1_E6_1_a_e {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         //a)

@@ -1,4 +1,4 @@
-package exercises.Chapter6;
+package ap.exercises.ex1.Chapter6;
 /*Question:
 Write a program that reads an integer and
 displays, using asterisks, a filled and hollow
@@ -14,7 +14,7 @@ should display like:
 
 import java.util.Scanner;
 
-public class Exe6_17 {
+public class Main_EX1_E6_17 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("enter a number(should be integer) :  ");

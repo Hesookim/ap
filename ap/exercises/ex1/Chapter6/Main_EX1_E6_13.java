@@ -1,7 +1,7 @@
-package exercises.Chapter6;
+package ap.exercises.ex1.Chapter6;
 
 import java.util.Scanner;
-public class Exe6_13 {
+public class Main_EX1_E6_13 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("enter a number :  ");

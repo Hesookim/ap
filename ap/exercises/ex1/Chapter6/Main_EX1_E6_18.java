@@ -1,4 +1,4 @@
-package exercises.Chapter6;
+package ap.exercises.ex1.Chapter6;
 /*Question:
 Write a program that reads an integer and
 displays, using asterisks, a filled diamond
@@ -16,7 +16,7 @@ display like:
 
 import java.util.Scanner;
 
-public class Exe6_18 {
+public class Main_EX1_E6_18 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("enter a number(should be integer) :  ");

@@ -1,4 +1,4 @@
-package exercises.Chapter5;
+package ap.exercises.ex1.Chapter5;
 /*Question 5.18 :
  Write a program that reads in three strings and sorts them lexicographically.
 Enter three strings:Charlie Able Baker
@@ -8,7 +8,7 @@ Charlie
 */
 import java.util.Scanner;
 
-public class Exe5_18 {
+public class Main_EX1_E5_18 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter three strings : ");

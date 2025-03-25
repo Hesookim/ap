@@ -1,4 +1,4 @@
-package exercises.Chapter6;
+package ap.exercises.ex1.Chapter6;
 /*Write programs that read a line of input as a string and print.
 a)Only the uppercase letters in the string.
 b)Every second letter of the string.
@@ -9,7 +9,7 @@ e)The positions of all vowels in the string.
 
 import java.util.Scanner;
 
-public class Exe6_3 {
+public class Main_EX1_E6_3 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
