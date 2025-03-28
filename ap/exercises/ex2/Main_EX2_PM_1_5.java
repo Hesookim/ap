@@ -116,4 +116,4 @@ public class Main_EX2_PM_1_5 {
         return true;
     }
 }
-//this program will not finish until the user stops it
+//this program will not finish until the user stops it by hand
