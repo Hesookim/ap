@@ -153,8 +153,8 @@ public class Main_EX3_LM_1_2_A {
             Book book = books[i];
                 writer.write(book.getName() + ",");
                 writer.write(book.getAuthor() + ",");
-                writer.write(Integer.toString(book.getYear()) + ","); // Changing integer to string to be able to use correct form of number
-                writer.write(Integer.toString(book.getPages()) + "\n");// Changing integer to string to be able to use correct form of number
+                writer.write(book.getYear() + ",");
+                writer.write(book.getPages() + "\n");
             }
             System.out.println("Books saved to file " + booksFile);
         } catch (IOException e) {
@@ -167,7 +167,7 @@ public class Main_EX3_LM_1_2_A {
             for (int i = 0; i < studentCount; i++) {
                 Student student = students[i];
                 writer.write(student.getFirstName() +" " + student.getLastName() + ","); // Saving first and last name of the student together
-                writer.write(Integer.toString(student.getSin()) + ",");// Changing integer to string to be able to use correct form of number
+                writer.write(student.getSin() + ",");
                 writer.write(student.getMajor() + "\n");
             }
         } catch (IOException e) {
