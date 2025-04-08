@@ -2,68 +2,6 @@ package ap.exercises.ex3;
 
 import java.util.Scanner;
 
-// Books info
-class Book {
-    private String name;
-    private String author;
-    private int year;
-    private int pages;
-
-    public Book(String name, String author, int year, int pages) {
-        this.name = name;
-        this.author = author;
-        this.year = year;
-        this.pages = pages;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public int getPages() {
-        return pages;
-    }
-}
-
-// Students info
-class Student {
-    private String firstName;
-    private String lastName;
-    private int sin;// student identification number
-    private String major;
-
-    public Student(String firstName, String lastName, int sin, String major) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.sin = sin;
-        this.major = major;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public int getSin() {
-        return sin;
-    }
-
-    public String getMajor() {
-        return major;
-    }
-}
-
 public class Main_EX3_LM_1_1 {
     private static final int maxBooks = 5000;  // Maximum number of books
     private static final int maxStudents = 5000; // Maximum number of students
