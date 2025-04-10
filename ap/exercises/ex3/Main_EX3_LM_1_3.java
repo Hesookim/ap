@@ -51,9 +51,10 @@ public class Main_EX3_LM_1_3 {
             System.out.println("2. Add a student");
             System.out.println("3. View all books");
             System.out.println("4. View all students");
-            System.out.println("5. Save data to files");
-            System.out.println("6. Load data from files");
-            System.out.println("7. Exit");
+            System.out.println("5. Search for student by name");
+            System.out.println("6. Save data to files");
+            System.out.println("7. Load data from files");
+            System.out.println("8. Exit");
             System.out.println("=============================");
             System.out.print("Enter your choice: ");
 
@@ -133,17 +134,21 @@ public class Main_EX3_LM_1_3 {
                     }
                     break;
 
-                case 5 :// Save files
+                case 5 :// Search student by name
+                    searchByName();
+                    break;
+
+                case 6 :// Save files
                     savebook();
                     saveStudents();
                     break;
 
-                case 6 :// Load files
+                case 7 :// Load files
                     loadBooks();
                     loadStudents();
                     break;
 
-                case 7 :// Exist
+                case 8 :// Exist
                     System.out.println("Existing the program.... ");
                     scanner.close();
                     return;
@@ -229,5 +234,34 @@ public class Main_EX3_LM_1_3 {
             }
         }
         return false;
+    }
+    // Method to search name of student
+    private static void searchByName() {
+        if (studentsFiles.isEmpty()) {
+            System.out.println(" No students available.");
+            return;
+        }
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter students name (if it is first name start with uppercase, if it is lastname all should be lowercase): ");
+            String searchName = scanner.nextLine().trim().toLowerCase();
+
+            boolean found = false;
+            for (int i = 0; i < studentCount; i++) {
+              Student student = students[i];// Check both first and last name (case insensitive)
+               if (student.getFirstName().toLowerCase().contains(searchName) ||
+                    student.getLastName().toLowerCase().contains(searchName)) {
+
+                System.out.println("Student Found!");
+                System.out.println("Name: " + student.getFirstName() + " " + student.getLastName());
+                System.out.println("SIN: " + student.getSin());
+                System.out.println("Major: " + student.getMajor());
+                System.out.println();
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("\n Student not found.");
+        }
     }
 }
