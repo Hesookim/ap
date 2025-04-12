@@ -28,4 +28,12 @@ class Student {
     public String getMajor() {
         return major;
     }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }
