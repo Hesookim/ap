@@ -65,7 +65,8 @@ public class Main_EX3_LM_2_1 {
             System.out.println("6. Save data to files");
             System.out.println("7. Load data from files");
             System.out.println("8. Borrow a book");
-            System.out.println("9. Exit");
+            System.out.println("9. Edit a students name");
+            System.out.println("10. Exit");
             System.out.println("=============================");
             System.out.print("Enter your choice: ");
 
@@ -179,7 +180,11 @@ public class Main_EX3_LM_2_1 {
                     borrowBookMenu();
                     break;
 
-                case 9 :// Exist
+                case 9 :// Edit student name
+                    editStudentName();
+                    break;
+
+                case 10 :// Exist
                     System.out.println("Existing the program.... ");
                     scanner.close();
                     return;
@@ -304,6 +309,43 @@ public class Main_EX3_LM_2_1 {
             }
         }
         return null;
+    }
+    // Method to edit a student name
+    private static void editStudentName() {
+        if (studentCount == 0) {
+            System.out.println("No students available to edit.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+       // Using SIN to identify the student
+        System.out.print("Enter student SIN to edit: ");
+        int sin = scanner.nextInt();
+        scanner.nextLine();
+
+        Student student = findStudentBySin(sin);
+
+        if (student == null) {
+            System.out.println("Student not found!");
+            return;
+        }
+
+        // Display current name
+        System.out.println("Current name: " + student.getFirstName() + " " + student.getLastName());
+
+        // Get new names
+        System.out.print("Enter new first name: ");
+        String newFirstName = scanner.nextLine();
+
+        System.out.print("Enter new last name: ");
+        String newLastName = scanner.nextLine();
+
+        // Update names
+        student.setFirstName(newFirstName);
+        student.setLastName(newLastName);
+
+        System.out.println("Student name updated successfully!");
     }
     // Method to search book by name
     private static LibraryBooks findBook(String identifier) {
