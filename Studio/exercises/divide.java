@@ -14,8 +14,8 @@ public class divide {
         try {
             int result = a / b;
             System.out.println("Result: " + result);
-        } catch (ArithmeticException e) {
-            System.out.println("Not possible! " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Not possible! " + e.getClass().getName());
         }
     }
 }
