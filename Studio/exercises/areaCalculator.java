@@ -61,6 +61,37 @@ class Triangle extends Shape{
         return ((double) 1 /2) * base * height;
     }
 }
+
+class Parallelogram extends Shape{
+    double base;
+    double height;
+    public Parallelogram(double b, double h) {
+        base = b;
+        height = h;
+    }
+
+    @Override
+    public double area(){
+        return base * height;
+    }
+}
+
+class Trapezoid extends Shape {
+    double a;
+    double b;
+    double h;
+    public Trapezoid(double a1, double b1, double h1) {
+        a = a1;
+        b = b1;
+        h=h1;
+    }
+
+    @Override
+    public double area() {
+        return ((double) 1 /2) * (a + b) * h;
+    }
+}
+
 public class areaCalculator {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -69,6 +100,8 @@ public class areaCalculator {
         System.out.println("2. Rectangle");
         System.out.println("3. Square");
         System.out.println("4. Triangle");
+        System.out.println("5. Parallelogram");
+        System.out.println("6. Trapezoid");
         int shape = scanner.nextInt();
         switch (shape) {
             case 1 :
@@ -91,7 +124,7 @@ public class areaCalculator {
                 System.out.println("Enter width: ");
                 double s = scanner.nextInt();
                 Square mySquare = new Square(s);
-                System.out.println("Rectangle area: " + mySquare.area());
+                System.out.println("Square area: " + mySquare.area());
                 break;
 
             case 4 :
@@ -100,7 +133,27 @@ public class areaCalculator {
                 System.out.println("Enter height: ");
                 double h = scanner.nextInt();
                 Triangle myTriangle = new Triangle(b , h);
-                System.out.println("Rectangle area: " + myTriangle.area());
+                System.out.println(" Triangle area: " + myTriangle.area());
+                break;
+
+            case 5 :
+                System.out.println("Enter base: ");
+                double bp = scanner.nextInt();
+                System.out.println("Enter height: ");
+                double hp = scanner.nextInt();
+                Parallelogram myParallelogram = new Parallelogram(bp , hp);
+                System.out.println("Parallelogram area: " + myParallelogram.area());
+                break;
+
+            case 6 :
+                System.out.println("Enter first parallel side: ");
+                double a1 = scanner.nextInt();
+                System.out.println("Enter second parallel side: ");
+                double b1 = scanner.nextInt();
+                System.out.println("Enter height: ");
+                double h1 = scanner.nextInt();
+                Trapezoid myTrapezoid = new Trapezoid(a1 , b1, h1);
+                System.out.println("Trapezoid area: " + myTrapezoid.area());
                 break;
         }
     }
