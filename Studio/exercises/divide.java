@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class divide {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
         System.out.println("Enter first number: ");
         int a = scanner.nextInt();
         System.out.println("Enter second number: ");
@@ -14,8 +13,10 @@ public class divide {
         try {
             int result = a / b;
             System.out.println("Result: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Not possible! " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Not possible! " + e.getClass().getName());
+            System.out.println("An unexpected error occurred: " + e.getMessage());
         }
     }
 }
