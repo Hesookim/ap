@@ -1,4 +1,4 @@
-package Studio.exercises;
+package ap.exercises;
 
 import java.util.*;
 
