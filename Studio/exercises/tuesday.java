@@ -2,15 +2,14 @@ package Studio.exercises;
 
 import java.util.*;
 
-class Book {
+class Books {
     String title;
     double price;
 
-    public Book(String title, double price) {
+    public Books(String title, double price) {
         this.title = title;
         this.price = price;
     }
-
 
     @Override
     public String toString() {
@@ -29,7 +28,6 @@ class Pen {
         this.color = color;
     }
 
-
     @Override
     public String toString() {
         return brand + ", " + price + ", " + color;
@@ -38,13 +36,24 @@ class Pen {
 
 public class tuesday {
     public static void main(String[] args) {
-        List<Book> books = new ArrayList<Book>(Arrays.asList(
-                new Book("abs","145"),
-
+        List<Books> books = new ArrayList<>(Arrays.asList(
+                new Books("The Great Gatsby", 12.99),
+                new Books("To Kill a Mockingbird", 9.99)
         ));
 
-        List<Pen> pens = new ArrayList<Pen>();
+        List<Pen> pens = new ArrayList<>(Arrays.asList(
+                new Pen("Parker", 5.99, "Blue"),
+                new Pen("Pilot", 3.49, "Black")
+        ));
 
+        System.out.println("Books:");
+        for (Books book : books) {
+            System.out.println(book);
+        }
 
+        System.out.println("\nPens:");
+        for (Pen pen : pens) {
+            System.out.println(pen);
+        }
     }
 }
