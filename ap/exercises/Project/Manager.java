@@ -20,4 +20,9 @@ public class Manager extends User {
         Librarian newLibrarian = new Librarian(firstName, lastName);
         library.addLibrarian(newLibrarian);
     }
+
+    @Override
+    public String toString() {
+        return "Manager," + getFirstName() + "," + getLastName() + "," + getId() + "," + getPassword();
+    }
 }

@@ -33,4 +33,9 @@ public class Librarian extends User {
         super.validPassword(password);
         super.setNewPassword(password);
     }
+
+    @Override
+    public String toString() {
+        return "Librarian," + getFirstName() + "," + getLastName() + "," + getId() + "," + getPassword();
+    }
 }

@@ -1,5 +1,6 @@
 package ap.exercises.Project;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
@@ -42,6 +43,15 @@ public class Library {
     public List<Book> getBookList() {
         return bookList;
     }
+
+    public  List<Student> getStudentList() {
+        return studentList;
+    }
+
+    public List<Librarian> getLibrarianList() {
+        return librarianList;
+    }
+
 
     public void addBook(Book book, User user) {
         if (!(user instanceof Librarian)) {
@@ -113,15 +123,5 @@ public class Library {
 
         librarianList.add(librarian);
         System.out.println("Librarian " + librarian.getFirstName() + " " + librarian.getLastName() + " added successfully!");
-    }
-
-    public List<Book> searchBooks(String query) {
-        List<Book> results = new ArrayList<>();
-        for (Book book : bookList) {
-            if (book.getTitle().contains(query) || book.getAuthor().contains(query)) {
-                results.add(book);
-            }
-        }
-        return results;
     }
 }

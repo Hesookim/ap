@@ -46,8 +46,8 @@ public abstract class User {
     public void setPassword(String currentPassword, String newPassword) {
         if (!authenticate(currentPassword)) {
             throw new IllegalArgumentException("Current password doesn't match!");
-        } else if (!newPassword.equals(currentPassword)) {
-            throw new IllegalArgumentException("New password is equal to current password!");
+        } else if (newPassword.equals(currentPassword)) {
+            throw new IllegalArgumentException("New password cannot be the same as the current password!");
         }
         validPassword(newPassword);
         this.password = newPassword;
@@ -92,5 +92,10 @@ public abstract class User {
 
     protected void setNewPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User," + firstName + "," + lastName + "," + id + "," + password;
     }
 }

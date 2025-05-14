@@ -38,13 +38,7 @@ public class Student extends User {
 
     @Override
     public String toString() {
-        return "Student [" +
-                "firstName: '" + getFirstName() +
-                ", lastName: '" + getLastName() +
-                ", sin: " + getId() +
-                ", major: '" + major + ", " +
-                ", joinDate: " + joinDate +
-                ']';
+        return "Student [" + "firstName: '" + getFirstName() + ", lastName: '" + getLastName() + ", sin: " + getId() + ", major: '" + major + ", " + ", joinDate: " + joinDate + ']';
     }
 
     public String getFullName() {
