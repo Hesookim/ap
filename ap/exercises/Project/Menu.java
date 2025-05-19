@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Menu {
-    private Scanner scanner;
+    private Scanner scanner = new Scanner(System.in);;
     private Library library;
+    private final FileHandler fh;
 
-    public Menu(Library library) {
-        this.scanner = new Scanner(System.in);
+    public Menu(Library library,  FileHandler fh) {
         this.library = library;
+        this.fh = fh;
     }
 
     public void showMenu() {
@@ -32,6 +33,8 @@ public class Menu {
 
                 case 2:
                     library.signOut();
+                    try { fh.saveAll(library); }
+                    catch (Exception e) { System.err.println("Save error: "+ e.getMessage()); }
                     System.out.println("you signed out. Good bye!");
                     break;
 
@@ -73,6 +76,51 @@ public class Menu {
                 default:
                     System.out.println("invalid choice! Please enter again!");
             }
+        }
+    }
+
+    private void authenticateStudent() {
+        System.out.print("Student ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+
+        if (library.signIn(id, password)) {
+            showStudentMenu((Student) library.getCurrentUser());
+            return;
+        }
+
+        System.out.println("No student found. Would you like to sign up? (y/n)");
+        String choice = scanner.nextLine();
+
+        if (choice.equalsIgnoreCase("y")) {
+            System.out.print("First Name: ");
+            String firstName = scanner.nextLine();
+
+            System.out.print("Last Name: ");
+            String lastName = scanner.nextLine();
+
+            System.out.print("Major: ");
+            String major = scanner.nextLine();
+
+            Student st = new Student(firstName, lastName, id, major, password);
+            library.registerStudent(st);
+            System.out.println("Registration successful!");
+        }
+    }
+
+    private void authenticateManager() {
+        System.out.println("MangerId: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+
+        if (library.signIn(id, password) && library.getCurrentUser() instanceof Manager) {
+            showManagerMenu();
         }
     }
 
@@ -121,18 +169,22 @@ public class Menu {
 
         if (librarian.getId() == id && librarian.authenticate(password)) {
             System.out.println("Librarian signed in successfully!");
-            showLibrarianMenu();
+            showLibrarianMenu(librarian);
         } else {
             System.out.println("Invalid ID or password.");
         }
     }
 
-    private void showLibrarianMenu() {
+    private void showLibrarianMenu(Librarian librarian) {
         while (true) {
             System.out.println("Librarian Menu:");
             System.out.println("==========================");
             System.out.println("1. Add book");
-            System.out.println("2. Return to main menu");
+            System.out.println("2. Confirm borrow");
+            System.out.println("3. Confirm return");
+            System.out.println("4. Get students loan history");
+            System.out.println("5. Get all handed loans");
+            System.out.println("6. Return to main menu");
             System.out.println("==========================");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -144,6 +196,28 @@ public class Menu {
                     break;
 
                 case 2:
+                    System.out.print("Pending-borrow index: ");
+                    int idx = scanner.nextInt();
+                    library.confirmBorrow(idx, librarian);
+                    break;
+
+                case 3:
+                    System.out.print("Pending-return index: ");
+                    int rIdx = scanner.nextInt();
+                    library.confirmReturn(rIdx, librarian);
+                    break;
+
+                case 4:
+                    System.out.println("Enter the students ID: ");
+                    int id = scanner.nextInt();
+                    library.getLoansOfStudent(id);
+                    break;
+
+                case 5:
+                    library.getLoansHandledByLibrarian(librarian.getId());
+                    break;
+
+                case 6:
                     return;
 
                 default:
@@ -188,56 +262,15 @@ public class Menu {
         }
     }
 
-    private void authenticateStudent() {
-        System.out.print("Student ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-
-        if (library.signIn(id, password)) {
-            showStudentMenu();
-            return;
-        }
-
-        System.out.println("No student found. Would you like to sign up? (y/n)");
-        String choice = scanner.nextLine();
-
-        if (choice.equalsIgnoreCase("y")) {
-            System.out.print("First Name: ");
-            String firstName = scanner.nextLine();
-
-            System.out.print("Last Name: ");
-            String lastName = scanner.nextLine();
-
-            System.out.print("Major: ");
-            String major = scanner.nextLine();
-
-            Student newStudent = new Student(firstName, lastName, id, major, password);
-            library.registerStudent(newStudent);
-            System.out.println("Registration successful!");
-        }
-    }
-
-    private void authenticateManager() {
-        System.out.println("MangerId: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-
-        if (library.signIn(id, password)) {
-            showManagerMenu();
-        }
-    }
-
-    private void showStudentMenu() {
+    private void showStudentMenu(Student st) {
         while (true) {
             System.out.println("Students Menu: ");
-            System.out.println("==========================");
-            System.out.println("1. Search for a book");
+            System.out.println("1) Search book");
+            System.out.println("2) Request borrow");
+            System.out.println("3) Request return");
+            System.out.println("4) My active loans");
+            System.out.println("5) My loan history");
+            System.out.println("6) Sign-out");
             System.out.println("===========================");
             System.out.print("Enter your choice: ");
 
@@ -245,12 +278,36 @@ public class Menu {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 :
+                case 1:
                     searchBookMenu();
                     break;
 
+                case 2:
+                    System.out.println("Enter isbn of the book you want to borrow: ");
+                    String isbn = scanner.nextLine();
+                    library.requestBorrow(st.getId(), isbn);
+                    break;
+
+                case 3:
+                    System.out.println("Enter isbn of the book you want to return: ");
+                    String rIsbn = scanner.nextLine();
+                    library.requestReturn(st.getId(), rIsbn);
+                    break;
+
+                case 4:
+                 listLoans (library.getActiveLoansForStudent(st.getId()));
+                    break;
+
+                case 5:
+                   listLoans (library.getLoanHistoryForStudent(st.getId()));
+                    break;
+
+                case 6:
+                    library.signOut();
+                    break;
+
                 default:
-                    System.out.println("invalid choice! please try again!");
+                    System.out.println("Invalid choice! Please try again!");
             }
         }
     }
@@ -298,6 +355,11 @@ public class Menu {
             System.out.println("Managers Menu: ");
             System.out.println("==========================");
             System.out.println("1. Add librarian");
+            System.out.println("2. Get overdue loans ");
+            System.out.println("3. Get Issue Count For Librarian");
+            System.out.println("4. Get Return Count For Librarian");
+            System.out.println("5. Get Top Borrowed Books since LastYear");
+            System.out.println("6. Return");
             System.out.println("===========================");
             System.out.print("Enter your choice: ");
 
@@ -324,9 +386,37 @@ public class Menu {
                         }
                     break;
 
+                case 2:
+                    library.getOverdueLoans();
+                    break;
+
+                case 3:
+                    System.out.println("Which librarian would you like to get issue counts for? (write the librarians ID)");
+                    int index = scanner.nextInt();
+                    library.getIssueCountForLibrarian(index);
+                    break;
+
+                case 4:
+                    System.out.println("Which librarian would you like to get returned counts for? (write the librarians ID)");
+                    int rIndex = scanner.nextInt();
+                    library.getReturnCountForLibrarian(rIndex);
+                    break;
+
+                case 5:
+                    library.getTopBorrowedBooksLastYear(10);
+                    break;
+
+                case 6:
+                    return;
+
                 default :
                     System.out.println("invalid choice! please try again!");
             }
         }
+    }
+
+    private void listLoans(List<BorrowBook> list) {
+        if (list.isEmpty()) System.out.println("-- none --");
+        else list.forEach(System.out::println);
     }
 }

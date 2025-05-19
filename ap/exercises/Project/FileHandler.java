@@ -1,188 +1,171 @@
 package ap.exercises.Project;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FileHandler {
-    private final String booksFile = "books.txt";
-    private final String studentsFile = "students.txt";
-    private final String librariansFile = "librarians.txt";
-    private final String managerFile = "manager.txt";
 
+    private static final String BOOKS_FILE       = "books.txt";
+    private static final String STUDENTS_FILE    = "students.txt";
+    private static final String LIBRARIANS_FILE  = "librarians.txt";
+    private static final String MANAGER_FILE     = "manager.txt";
+    private static final String BORROWINGS_FILE  = "borrowings.txt";
     private Manager currentManager;
 
-    public void saveAll(Library library) throws IOException {
-        saveBooks(library.getBookList());
-        saveStudents(library.getStudentList());
-        saveLibrarians(library.getLibrarianList());
+    public void saveAll(Library lib) throws IOException {
+        saveBooks(lib.getBookList());
+        saveStudents(lib.getStudentList());
+        saveLibrarians(lib.getLibrarianList());
         saveManager(currentManager);
-    }
-
-    private void saveBooks(List<Book> books) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(booksFile))) {
-            for (Book book : books) {
-                writer.println(
-                        book.getTitle() + "," +
-                                book.getAuthor() + "," +
-                                book.getYear() + "," +
-                                book.getPages() + "," +
-                                book.getCopies() + "," +
-                                book.getISBN()
-                );
-            }
-        }
-    }
-
-    private void saveStudents(List<Student> students) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(studentsFile))) {
-            for (Student student : students) {
-                writer.println(
-                        student.getFirstName() + "," +
-                                student.getLastName() + "," +
-                                student.getId() + "," +
-                                student.getMajor() + "," +
-                                student.getPassword()
-                );
-            }
-        }
-    }
-
-    private void saveLibrarians(List<Librarian> librarians) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(librariansFile))) {
-            for (Librarian librarian : librarians) {
-                writer.println(
-                        librarian.getFirstName() + "," +
-                                librarian.getLastName() + "," +
-                                librarian.getId() + "," +
-                                librarian.getPassword() + "," +
-                                librarian.isRegistered()
-                );
-            }
-        }
-    }
-
-    private void saveManager(Manager manager) throws IOException {
-        if (manager == null) return;
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter(managerFile))) {
-            writer.println(
-                    manager.getFirstName() + "," +
-                            manager.getLastName() + "," +
-                            manager.getId() + "," +
-                            manager.getPassword()
-            );
-        }
+        saveBorrowings(lib.getBorrowBookList());
     }
 
     public Library loadAll(String libraryName) throws IOException {
-        Library library = new Library(libraryName);
-
-        loadBooks(library);
-        loadStudents(library);
-        loadLibrarians(library);
-        loadManager(library);
-        return library;
+        Library lib = new Library(libraryName);
+        loadBooks(lib);
+        loadStudents(lib);
+        loadLibrarians(lib);
+        loadManager(lib);
+        loadBorrowings(lib);
+        return lib;
     }
 
-    private void loadBooks(Library library) throws IOException {
-        File file = new File(booksFile);
-        if (!file.exists()) return;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                Book book = new Book(
-                        parts[0], parts[1],
-                        Integer.parseInt(parts[2]),
-                        Integer.parseInt(parts[3]),
-                        Integer.parseInt(parts[4]),
-                        parts[5]
+    private void saveBooks(List<Book> list) throws IOException {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(BOOKS_FILE))) {
+            for (Book b : list) {
+                pw.println(
+                        b.getTitle() + "," +
+                                b.getAuthor() + "," +
+                                b.getYear() + "," +
+                                b.getPages() + "," +
+                                b.getCopies() + "," +
+                                b.getISBN()
                 );
-                library.addBook(book, library.getRandomLibrarian());
             }
         }
     }
 
-    private void loadStudents(Library library) throws IOException {
-        File file = new File(studentsFile);
-        if (!file.exists()) return;
+    private void loadBooks(Library lib) throws IOException {
+        File f = new File(BOOKS_FILE);
+        if (!f.exists()) return;
+        for (String ln : Files.readAllLines(Path.of(BOOKS_FILE))) {
+            String[] p = ln.split(",",6);
+            Book b = new Book(p[0],p[1],Integer.parseInt(p[2]),
+                    Integer.parseInt(p[3]),Integer.parseInt(p[4]),p[5]);
+            lib.addBook(b, lib.getRandomLibrarian());
+        }
+    }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                Student student = new Student(
-                        parts[0], parts[1],
-                        Integer.parseInt(parts[2]),
-                        parts[3], parts[4]
+    private void saveStudents(List<Student> list) throws IOException {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(STUDENTS_FILE))) {
+            for (Student s : list) {
+                pw.println(
+                        s.getFirstName() + "," +
+                                s.getLastName() + "," +
+                                s.getId() + "," +
+                                s.getMajor() + "," +
+                                s.getPassword()
                 );
-                library.registerStudent(student);
             }
         }
     }
 
-    private void loadLibrarians(Library library) throws IOException {
-        File file = new File(librariansFile);
-        if (!file.exists()) return;
+    private void loadStudents(Library lib) throws IOException {
+        File f = new File(STUDENTS_FILE);
+        if (!f.exists()) return;
+        for (String ln : Files.readAllLines(Path.of(STUDENTS_FILE))) {
+            String[] p = ln.split(",",5);
+            Student s = new Student(p[0],p[1],Integer.parseInt(p[2]),p[3],p[4]);
+            lib.registerStudent(s);
+        }
+    }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                Librarian librarian = new Librarian(
-                        parts[0], parts[1],
-                        Integer.parseInt(parts[2]),
-                        parts[3]
+    private void saveLibrarians(List<Librarian> list) throws IOException {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(LIBRARIANS_FILE))) {
+            for (Librarian l : list) {
+                pw.println(
+                        l.getFirstName() + "," +
+                                l.getLastName() + "," +
+                                l.getId() + "," +
+                                l.getPassword() + "," +
+                                l.isRegistered()
                 );
-                if (Boolean.parseBoolean(parts[4])) {
-                    librarian.completeRegistration(
-                            Integer.parseInt(parts[2]),
-                            parts[3]
-                    );
-                }
-                library.addLibrarian(librarian);
             }
         }
     }
 
-    private void loadManager(Library library) throws IOException {
-        File file = new File(managerFile);
-        if (!file.exists()) return;
+    private void loadLibrarians(Library lib) throws IOException {
+        File f = new File(LIBRARIANS_FILE);
+        if (!f.exists()) return;
+        for (String ln : Files.readAllLines(Path.of(LIBRARIANS_FILE))) {
+            String[] p = ln.split(",",5);
+            Librarian l = new Librarian(p[0],p[1],Integer.parseInt(p[2]),p[3]);
+            if (Boolean.parseBoolean(p[4])) l.completeRegistration(l.getId(), p[3]);
+            lib.addLibrarian(l);
+        }
+    }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line = reader.readLine();
-            if (line != null) {
-                String[] parts = line.split(",");
-                Manager manager = new Manager(
-                        parts[0], parts[1],
-                        Integer.parseInt(parts[2]),
-                        parts[3],
-                        library
+    private void saveManager(Manager m) throws IOException {
+        if (m == null) return;
+        try (PrintWriter pw = new PrintWriter(new FileWriter(MANAGER_FILE))) {
+            pw.println(m);
+        }
+    }
+
+    private void loadManager(Library lib) throws IOException {
+        File f = new File(MANAGER_FILE);
+        if (!f.exists()) return;
+        String ln = Files.readString(Path.of(MANAGER_FILE));
+        if (ln.isEmpty()) return;
+        String[] p = ln.split(",",4);
+        Manager m = new Manager(p[0],p[1],Integer.parseInt(p[2]),p[3],lib);
+        lib.setManager(m);
+                this.currentManager = m;
+            }
+
+
+    private void saveBorrowings(List<BorrowBook> list) throws IOException {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(BORROWINGS_FILE))) {
+            for (BorrowBook bb : list) {
+                pw.println(
+                        bb.getBook().getISBN() + "|" +
+                                bb.getStudent().getId() + "|" +
+                                bb.getLendingLibrarian().getId() + "|" +
+                                bb.getBorrowDate() + "|" +
+                                bb.getDueDate() + "|" +
+                                (bb.isReturned() ? bb.getReturnedDate() : "null") + "|" +
+                                (bb.isReturned() && bb.getReceivingLibrarian() != null
+                                        ? bb.getReceivingLibrarian().getId() : "0")
                 );
-                library.setManager(manager);
-                this.currentManager = manager;
             }
         }
     }
 
-    private Book findBookByISBN(Library library, String isbn) {
-        for (Book book : library.getBookList()) {
-            if (book.getISBN().equals(isbn)) {
-                return book;
-            }
+    private void loadBorrowings(Library lib) throws IOException {
+        File f = new File(BORROWINGS_FILE);
+        if (!f.exists()) return;
+
+        for (String ln : Files.readAllLines(Path.of(BORROWINGS_FILE))) {
+            String[] p = ln.split("\\|",8);
+            Book bk   = lib.findBook(p[0]);
+            Student st   = lib.findStudent(Integer.parseInt(p[1]));
+            Librarian lend = lib.findLibrarian(Integer.parseInt(p[2]));
+            LocalDate bor = LocalDate.parse(p[3]);
+            LocalDate due = LocalDate.parse(p[4]);
+            boolean ret  = Boolean.parseBoolean(p[5]);
+            LocalDate rDt = !"null".equals(p[6]) ? LocalDate.parse(p[6]) : null;
+            Librarian rec  = Integer.parseInt(p[7])!=0 ? lib.findLibrarian(Integer.parseInt(p[7])) : null;
+
+            BorrowBook bb = new BorrowBook(bk,st,lend,bor,due,rec);
+            if (ret) bb.setReturnInfo(rDt, rec);
+            lib.getBorrowBookList().add(bb);
         }
-        return null;
     }
 
-    private Student findStudentById(Library library, int id) {
-        for (Student student : library.getStudentList()) {
-            if (student.getId() == id) {
-                return student;
-            }
-        }
-        return null;
+    public void setCurrentManager(Manager m) {
+        this.currentManager = m;
     }
 }

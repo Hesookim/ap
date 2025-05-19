@@ -9,8 +9,10 @@ public class Manager extends User {
     }
 
     public boolean verifyManager() {
-        return library.getCurrentUser() != null && library.getCurrentUser().getId() == this.getId();
+        User currentUser = library.getCurrentUser();
+        return currentUser != null && currentUser.getId() == this.getId() && currentUser instanceof Manager;
     }
+
 
     public void addLibrarian(String firstName, String lastName) {
         if (!verifyManager()) {

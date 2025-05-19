@@ -34,6 +34,11 @@ public class Librarian extends User {
         super.setNewPassword(password);
     }
 
+    public void setLendingLibrarian(Librarian lendingLibrarian) {
+        this.registered = lendingLibrarian.isRegistered();
+    }
+
+
     @Override
     public String toString() {
         return "Librarian," + getFirstName() + "," + getLastName() + "," + getId() + "," + getPassword();

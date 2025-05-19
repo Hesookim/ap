@@ -1,7 +1,5 @@
 package ap.exercises.Project;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.time.LocalDate;
 
 public class BorrowBook {
@@ -46,13 +44,21 @@ public class BorrowBook {
         return dueDate;
     }
 
+    public LocalDate  getReturnedDate()      {
+        return returnedDate;
+    }
+
     public Librarian getReceivingLibrarian() {
         return lendingLibrarian;
     }
 
-    public void setReturnInfo(LocalDate returnedDate, Librarian receivingLibrarian) {
+    public void setReturnInfo(LocalDate returnedDate, Librarian receiver){
         this.returnedDate = returnedDate;
-        this.lendingLibrarian = receivingLibrarian;
+        this.receivingLibrarian = receiver;
+    }
+
+    public void setLendingLibrarian(Librarian l){
+        this.lendingLibrarian = l;
     }
 
     public boolean isReturned() {
@@ -66,25 +72,20 @@ public class BorrowBook {
         return returnedDate.isAfter(dueDate);
     }
 
-    public long getDaysOverdue() {
-        if (!isOverdue()) return 0;
-
-        LocalDate endDate = isReturned() ? returnedDate : LocalDate.now();
-        return dueDate.until(endDate).getDays();
+    public long getDaysOverdue(){
+        if(!isOverdue()) return 0;
+        LocalDate ref = isReturned()? returnedDate : LocalDate.now();
+        return dueDate.until(ref).getDays();
     }
 
     @Override
-    public String toString() {
-        String bookState = isReturned() ? "Returned on " + returnedDate : "Due on " + dueDate + (isOverdue() ? " (OVERDUE)" : "");
-
-        return "borrow [" +
-                "Book: " + book.getTitle() +
-                ", Student: " + student.getFullName() +
-                ", Loan Date: " + borrowDate +
-                ", " + bookState +
-                "]";
-    }
-
-    public void searchForBook(){
+    public String toString(){
+        String status = isReturned()
+                ? "Returned on " + returnedDate
+                : "Due on " + dueDate + (isOverdue()? " (OVERDUE)" : "");
+        return "Borrow[Book='" + book.getTitle() +
+                "', Student='" + student.getFullName() +
+                "', LoanDate=" + borrowDate +
+                ", " + status + ']';
     }
 }
