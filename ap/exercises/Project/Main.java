@@ -29,8 +29,7 @@ public class Main {
 
         while (!quit) {
             mainMenu.showMenu();
-            System.out.print("\nExit program? (y/n): ");
-            if (input.nextLine().equalsIgnoreCase("y")) {
+            if (input.nextLine().equalsIgnoreCase("q")) {
                 quit = true;
             }
         }

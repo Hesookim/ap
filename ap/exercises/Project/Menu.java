@@ -1,11 +1,12 @@
 package ap.exercises.Project;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 
 public class Menu {
-    private Scanner scanner = new Scanner(System.in);;
+    private Scanner scanner = new Scanner(System.in);
     private Library library;
     private final FileHandler fh;
 
@@ -33,8 +34,11 @@ public class Menu {
 
                 case 2:
                     library.signOut();
-                    try { fh.saveAll(library); }
-                    catch (Exception e) { System.err.println("Save error: "+ e.getMessage()); }
+                    try {
+                        fh.saveAll(library);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     System.out.println("you signed out. Good bye!");
                     break;
 
@@ -71,6 +75,8 @@ public class Menu {
                     break;
 
                 case 4:
+                    try { fh.saveAll(library); }
+                    catch (Exception e) { System.err.println("Save error: "+ e.getMessage()); }
                     return;
 
                 default:
@@ -210,7 +216,9 @@ public class Menu {
                 case 4:
                     System.out.println("Enter the students ID: ");
                     int id = scanner.nextInt();
-                    library.getLoansOfStudent(id);
+                    scanner.nextLine();
+                    List<BorrowBook> loans = library.getLoansOfStudent(id);
+                    listLoans(loans);
                     break;
 
                 case 5:
@@ -218,6 +226,8 @@ public class Menu {
                     break;
 
                 case 6:
+                    try { fh.saveAll(library); }
+                    catch (Exception e) { System.err.println("Save error: "+ e.getMessage()); }
                     return;
 
                 default:
@@ -303,8 +313,9 @@ public class Menu {
                     break;
 
                 case 6:
-                    library.signOut();
-                    break;
+                    try { fh.saveAll(library); }
+                    catch (Exception e) { System.err.println("Save error: "+ e.getMessage()); }
+                    return;
 
                 default:
                     System.out.println("Invalid choice! Please try again!");
@@ -392,21 +403,40 @@ public class Menu {
 
                 case 3:
                     System.out.println("Which librarian would you like to get issue counts for? (write the librarians ID)");
-                    int index = scanner.nextInt();
-                    library.getIssueCountForLibrarian(index);
+                    int indexi = scanner.nextInt();
+                    scanner.nextLine();
+                    int issueCount = library.getIssueCountForLibrarian(indexi);
+                    System.out.println("Issue count for librarian " + indexi + ": " + issueCount);
                     break;
+
 
                 case 4:
                     System.out.println("Which librarian would you like to get returned counts for? (write the librarians ID)");
                     int rIndex = scanner.nextInt();
                     library.getReturnCountForLibrarian(rIndex);
+                    int  returnCount = library.getReturnCountForLibrarian(rIndex);
+                    System.out.println("Return count for librarian " + rIndex + ": " + returnCount);
                     break;
 
                 case 5:
-                    library.getTopBorrowedBooksLastYear(10);
+                    System.out.println("Which librarian would you like to get the most borrowed books for? (write the librarian's ID)");
+                    int index = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Book mostBorrowedBook = (Book) library.getTopBorrowedBooksLastYear(index);
+
+                    if (mostBorrowedBook != null) {
+                        System.out.println("Most borrowed book by librarian " + index + ":");
+                        System.out.println(mostBorrowedBook); // Assuming Book has a proper toString() method
+                    } else {
+                        System.out.println("No borrowed books found for librarian " + index);
+                    }
                     break;
 
+
                 case 6:
+                    try { fh.saveAll(library); }
+                    catch (Exception e) { System.err.println("Save error: "+ e.getMessage()); }
                     return;
 
                 default :
@@ -416,7 +446,7 @@ public class Menu {
     }
 
     private void listLoans(List<BorrowBook> list) {
-        if (list.isEmpty()) System.out.println("-- none --");
+        if (list.isEmpty()) System.out.println("null");
         else list.forEach(System.out::println);
     }
 }

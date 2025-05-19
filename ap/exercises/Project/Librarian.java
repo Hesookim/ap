@@ -18,7 +18,7 @@ public class Librarian extends User {
 
     public void completeRegistration(int employeeId, String password) {
         if (this.registered) {
-            throw new IllegalStateException("Registration already completed!");
+            return;
         }
 
         validId(employeeId);

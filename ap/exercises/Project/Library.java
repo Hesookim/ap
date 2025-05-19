@@ -27,7 +27,9 @@ public class Library {
         borrowBookList = new ArrayList<>();
         this.librarian1 = new Librarian("Librarian", "One", 39876453, "@hduekfkf");
         this.librarian2 = new Librarian("Librarian", "Two", 39876454, "hwjc&kkpqo");
-        this.librarianList = List.of(librarian1, librarian2);
+        this.librarianList = new ArrayList<>();
+         this.librarianList.add(librarian1);
+         this.librarianList.add(librarian2);
     }
 
     public void setManager(Manager manager) {
@@ -35,7 +37,7 @@ public class Library {
     }
 
     public Librarian getRandomLibrarian() {
-        Random random = null;
+        Random random = new Random();
         return librarianList.get(random.nextInt(librarianList.size()));
     }
 
@@ -54,22 +56,34 @@ public class Library {
 
     public void addBook(Book book, User user) {
         if (!(user instanceof Librarian)) {
-            throw new SecurityException("Only librarians can add books!");
+            System.out.println("Only librarians can add books!");
+            return;
         }
 
         if (book == null) {
-            throw new IllegalArgumentException("Book cannot be null!");
+            System.out.println("Book cannot be null!");
+            return;
         }
 
         bookList.add(book);
+        System.out.println("Book added successfully.");
     }
 
 
     public void registerStudent(Student student) {
-        if (student == null) throw new IllegalArgumentException("Student cannot be null!");
-        if (studentList.contains(student)) throw new IllegalStateException("Student already registered!");
+        if (student == null) {
+            System.out.println("Student cannot be null!");
+            return;
+        }
+
+        if (studentList.contains(student)) {
+            System.out.println("Student already registered!");
+            return;
+        }
+
         studentList.add(student);
     }
+
 
     public boolean signIn(int userId, String password) {
         for (Student student : studentList) {
@@ -107,22 +121,25 @@ public class Library {
 
     public void addLibrarian(Librarian librarian) {
         if (librarian == null) {
-            throw new IllegalArgumentException("Librarian cannot be null!");
+            System.out.println("Librarian cannot be null!");
+            return;
         }
 
         if (!(librarianList instanceof ArrayList)) {
             librarianList = new ArrayList<>(librarianList);
         }
 
-        for (Librarian newLibrarian : librarianList) {
-            if (newLibrarian.getId() == librarian.getId()) {
-                throw new IllegalArgumentException("Librarian already registered!");
+        for (Librarian existing : librarianList) {
+            if (existing.getId() == librarian.getId()) {
+                System.out.println("Librarian already registered!");
+                return;
             }
         }
 
         librarianList.add(librarian);
         System.out.println("Librarian " + librarian.getFirstName() + " " + librarian.getLastName() + " added successfully!");
     }
+
 
     private static final int STANDARD_LOAN_DAYS = 14;// Default borrowed days are 14
 
@@ -134,7 +151,7 @@ public class Library {
         Student s = findStudent(studentId);
         Book    b = findBook(isbn);
         if (b == null || !b.isAvailable())
-            throw new IllegalStateException("Book not available!");
+            System.out.println("Book not available!");
         BorrowBook loan = new BorrowBook(
                 b, s, null,
                 LocalDate.now(),
@@ -149,7 +166,7 @@ public class Library {
         BorrowBook loan = pendingBorrow.remove(pendingIndex);
 
         if (loan.getBook().getCopies() <= 0)
-            throw new IllegalStateException("No copies of the wanted book is left!");
+            System.out.println("No copies of the wanted book is left!");
 
         loan.setLendingLibrarian(confirmer);
         loan.getBook().setCopies(loan.getBook().getCopies() - 1);
@@ -179,7 +196,8 @@ public class Library {
                 return s;
             }
         }
-        throw new IllegalArgumentException("Student not found");
+        System.out.println("Student not found");
+        return null;
     }
 
     public Book findBook(String isbn) {
@@ -193,13 +211,12 @@ public class Library {
 
     private BorrowBook findActiveLoan(int studentId, String isbn) {
         for (BorrowBook l : borrowBookList) {
-            if (!l.isReturned()
-                    && l.getStudent().getId() == studentId
-                    && l.getBook().getISBN().equals(isbn)) {
+            if (!l.isReturned() && l.getStudent().getId() == studentId && l.getBook().getISBN().equals(isbn)) {
                 return l;
             }
         }
-        throw new IllegalStateException("Active loan not found");
+        System.out.println("Active loan not found");
+        return null;
     }
 
     public List<BorrowBook> getActiveLoansForStudent(int studentId) {
@@ -235,7 +252,7 @@ public class Library {
     public int getIssueCountForLibrarian(int librarianId) {
         int count = 0;
         for (BorrowBook bb : borrowBookList) {
-            if (bb.getLendingLibrarian().getId() == librarianId) {
+            if (bb.getLendingLibrarian() != null && bb.getLendingLibrarian().getId() == librarianId) {
                 count++;
             }
         }
@@ -245,9 +262,7 @@ public class Library {
     public int getReturnCountForLibrarian(int librarianId) {
         int count = 0;
         for (BorrowBook bb : borrowBookList) {
-            if (bb.isReturned() &&
-                    bb.getReceivingLibrarian() != null &&
-                    bb.getReceivingLibrarian().getId() == librarianId) {
+            if (bb.isReturned() && bb.getReceivingLibrarian() != null && bb.getReceivingLibrarian().getId() == librarianId) {
                 count++;
             }
         }
