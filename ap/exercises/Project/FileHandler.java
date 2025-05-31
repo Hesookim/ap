@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FileHandler {
 
-    private static final String SAVE_LOCATION     = "ap/exercises/project/"; // <─ base folder
+    private static final String SAVE_LOCATION     = "ap/exercises/project/"; // base folder
     private static final String BOOKS_FILE        = "books.txt";
     private static final String STUDENTS_FILE     = "students.txt";
     private static final String LIBRARIANS_FILE   = "librarians.txt";
