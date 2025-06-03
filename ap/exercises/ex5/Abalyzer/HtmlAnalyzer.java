@@ -1,16 +1,17 @@
-package ap.exercises.ex5;
+package ap.exercises.ex5.Abalyzer;
 
+import ap.exercises.ex5.Conf;
 import ap.exercises.ex5.parser.HtmlParser;
 import ap.exercises.ex5.utils.DirectoryTools;
 import ap.exercises.ex5.utils.FileTools;
-import ap.exercises.html.*;
+import ap.exercises.ex5.utils.ObjectCounter;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Analyzer {
+public class HtmlAnalyzer {
     private static List<String> fileList = DirectoryTools.getFilesAbsolutePathInDirectory(Conf.SAVE_DIRECTORY);
 
     public static List<String> getAllUrls() {
@@ -25,7 +26,7 @@ public class Analyzer {
         return urls;
     }
 
-    public static List<String> getTopUrls(int k) {
+    public static List<String> getTopUrls(int k){
         Map<String, Long> urlCount = getAllUrls().stream()
                 .collect(Collectors.groupingBy(
                         s -> s,
@@ -40,13 +41,11 @@ public class Analyzer {
 
         return topUrls;
     }
-
-    public static void printTopCountUrls(int k) {
-        StringCounterModified urlCounter = new StringCounterModified();
-        getAllUrls().forEach(urlCounter::add);
-
-        for (Counter counter : urlCounter.getTop(k)) {
-            System.out.println(counter.getItem() + " -> " + counter.getCount());
+    public static void printTopCountUrls(int k){
+        ObjectCounter<String> urlCounter=new ObjectCounter<>();
+        getAllUrls().forEach(s -> urlCounter.add(s));
+        for (Map.Entry<String, Integer> urlCountEntry : urlCounter.getTop(k)) {
+            System.out.println(urlCountEntry.getKey()+" -> "+urlCountEntry.getValue());
         }
     }
 
