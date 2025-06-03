@@ -1,8 +1,8 @@
 package ap.exercises.ex5;
 
-import ap.projects.scraper.fetcher.HtmlFetcher;
-import ap.projects.scraper.parser.HtmlParser;
-import ap.projects.scraper.store.HtmlFileManager;
+import ap.exercises.ex5.fetcher.HtmlFetcher;
+import ap.exercises.ex5.parser.HtmlParser;
+import ap.exercises.ex5.store.HtmlFileManager;
 
 import java.io.IOException;
 import java.util.*;
@@ -44,5 +44,4 @@ public class DomainHtmlScraper {
         }
         System.out.println("Operation complete");
     }
-
 }

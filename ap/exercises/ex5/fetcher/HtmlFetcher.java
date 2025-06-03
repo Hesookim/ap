@@ -21,5 +21,4 @@ public class HtmlFetcher {
         System.out.println(urlAddress+" fetched.");
         return htmlLines;
     }
-
 }
