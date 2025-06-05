@@ -1,6 +1,9 @@
 package ap.exercises.ex5;
 
-import ap.exercises.html.*;
+import ap.exercises.ex5.Abalyzer.HtmlAnalyzer;
+import ap.exercises.ex5.parser.HtmlParser;
+import ap.exercises.ex5.utils.DirectoryTools;
+import ap.exercises.ex5.utils.FileTools;
 
 import java.util.Comparator;
 import java.util.List;
