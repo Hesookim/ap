@@ -6,55 +6,75 @@ import ap.exercises.ex5.utils.DirectoryTools;
 import ap.exercises.ex5.utils.FileTools;
 import ap.exercises.ex5.utils.ObjectCounter;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HtmlAnalyzer {
+
     private static List<String> fileList = DirectoryTools.getFilesAbsolutePathInDirectory(Conf.SAVE_DIRECTORY);
 
     public static List<String> getAllUrls() {
-        List<String> urls = fileList.stream()
-                .map(fileAddress -> FileTools.getTextFileLines(fileAddress))
-                .filter(s -> s != null)
-                .flatMap(s -> s.stream())
-                .map(s -> HtmlParser.getFirstUrl(s))
-                .filter(s -> s != null)
+        return fileList.stream()
+                .map(FileTools::getTextFileLines)
+                .filter(Objects::nonNull)
+                .flatMap(List::stream)
+                .map(HtmlParser::getFirstUrl)
+                .filter(Objects::nonNull)
                 .filter(s -> s.length() > 1)
                 .collect(Collectors.toList());
-        return urls;
     }
 
-    public static List<String> getTopUrls(int k){
+    public static List<String> getTopUrls(int k) {
         Map<String, Long> urlCount = getAllUrls().stream()
-                .collect(Collectors.groupingBy(
-                        s -> s,
-                        Collectors.counting()
-                ));
+                .collect(Collectors.groupingBy(s -> s, Collectors.counting()));
 
-        List<String> topUrls = urlCount.entrySet().stream()
+        return urlCount.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .limit(k)
-                .map(s -> s.getKey())
+                .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
-
-        return topUrls;
     }
-    public static void printTopCountUrls(int k){
-        ObjectCounter<String> urlCounter=new ObjectCounter<>();
-        getAllUrls().forEach(s -> urlCounter.add(s));
+
+    public static void printTopCountUrls(int k) {
+        ObjectCounter<String> urlCounter = new ObjectCounter<>();
+        getAllUrls().forEach(urlCounter::add);
         for (Map.Entry<String, Integer> urlCountEntry : urlCounter.getTop(k)) {
-            System.out.println(urlCountEntry.getKey()+" -> "+urlCountEntry.getValue());
+            System.out.println(urlCountEntry.getKey() + " -> " + urlCountEntry.getValue());
+        }
+    }
+
+    public static void extractAndSaveMediaLinks() {
+        Set<String> imageLinks = new HashSet<>();
+        Set<String> audioLinks = new HashSet<>();
+
+        for (String filePath : fileList) {
+            List<String> lines = FileTools.getTextFileLines(filePath);
+            if (lines != null) {
+                imageLinks.addAll(HtmlParser.getAllImageUrlsFromList(lines));
+                audioLinks.addAll(HtmlParser.getAllAudioUrlsFromList(lines));
+            }
+        }
+
+        try {
+            Files.write(Path.of("image_links.txt"), imageLinks);
+            Files.write(Path.of("audio_links.txt"), audioLinks);
+            System.out.println("Media links saved.");
+        } catch (IOException e) {
+            System.err.println("Error writing media link files: " + e.getMessage());
         }
     }
 
     public static void main(String[] args) {
-
-        HtmlAnalyzer.printTopCountUrls(10);
+        System.out.println("Top 10 URLs:");
+        printTopCountUrls(10);
 
         System.out.println("____________________");
-        HtmlAnalyzer.getTopUrls(10).forEach(s -> System.out.println(s));
+        getTopUrls(10).forEach(System.out::println);
 
+        System.out.println("Extracting image/audio links...");
+        extractAndSaveMediaLinks();
     }
 }

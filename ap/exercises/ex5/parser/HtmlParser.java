@@ -68,15 +68,26 @@ public class HtmlParser {
 
     public static List<String> getAllImageUrlsFromList(List<String> htmlLines) {
         return htmlLines.stream()
-                .map(ap.exercises.html.HtmlParser::getFirstImageUrl)
+                .map(HtmlParser::getFirstImageUrl)
                 .filter(s -> s != null)
                 .collect(Collectors.toList());
     }
 
+    public static List<String> getAllImageUrlsFromFile(String filePath) throws IOException {
+        List<String> htmlLines = Files.readAllLines(Path.of(filePath));
+        return getAllImageUrlsFromList(htmlLines);
+    }
+
+
     public static List<String> getAllAudioUrlsFromList(List<String> htmlLines) {
         return htmlLines.stream()
-                .map(ap.exercises.html.HtmlParser::getFirstAudioUrl)
+                .map(HtmlParser::getFirstAudioUrl)
                 .filter(s -> s != null)
                 .collect(Collectors.toList());
+    }
+
+    public static List<String> getAllAudioUrlsFromFile(String filePath) throws IOException {
+        List<String> htmlLines = Files.readAllLines(Path.of(filePath));
+        return getAllAudioUrlsFromList(htmlLines);
     }
 }
