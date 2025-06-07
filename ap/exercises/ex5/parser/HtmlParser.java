@@ -34,13 +34,6 @@ public class HtmlParser {
         return urls;
     }
 
-    public static List<String> getAllUrlsFromList(List<String> htmlLines, String baseUrl) throws IOException {
-        return htmlLines.stream()
-                .map(line -> normalizeUrl(baseUrl, getFirstUrl(line)))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-    }
-
     public static List<String> getAllUrlsFromList(List<String> htmlLines) throws IOException {
         return getAllUrlsFromHtmlLinesStream(htmlLines.stream());
     }
@@ -79,35 +72,10 @@ public class HtmlParser {
                 .collect(Collectors.toList());
     }
 
-    public static List<String> getAllImageUrlsFromFile(String filePath) throws IOException {
-        List<String> htmlLines = Files.readAllLines(Path.of(filePath));
-        return getAllImageUrlsFromList(htmlLines);
-    }
-
-
     public static List<String> getAllAudioUrlsFromList(List<String> htmlLines) {
         return htmlLines.stream()
                 .map(HtmlParser::getFirstAudioUrl)
                 .filter(s -> s != null)
                 .collect(Collectors.toList());
-    }
-
-    public static List<String> getAllAudioUrlsFromFile(String filePath) throws IOException {
-        List<String> htmlLines = Files.readAllLines(Path.of(filePath));
-        return getAllAudioUrlsFromList(htmlLines);
-    }
-
-    public static String normalizeUrl(String baseUrl, String url) {
-        if (url == null || url.isEmpty()) {
-            return null;
-        }
-        try {
-            if (url.startsWith("http://") || url.startsWith("https://")) {
-                return url;
-            }
-            return new URL(new URL(baseUrl), url).toString();
-        } catch (Exception e) {
-            return null;
-        }
     }
 }
