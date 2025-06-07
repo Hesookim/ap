@@ -1,9 +1,11 @@
 package ap.exercises.ex5.parser;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,10 +16,11 @@ public class HtmlParser {
         int startIndex = htmlLine.indexOf("href=\"");
         if (startIndex >= 0) {
             try {
-                int hrefLength = "href\"".length();
-                int endIndex = htmlLine.indexOf("\"", startIndex + hrefLength + 1);
-                url = htmlLine.substring(startIndex + hrefLength + 1, endIndex);
+                int hrefLength = "href=\"".length();
+                int endIndex = htmlLine.indexOf("\"", startIndex + hrefLength);
+                url = htmlLine.substring(startIndex + hrefLength, endIndex);
             } catch (Exception e) {
+                return null;
             }
         }
         return url;
@@ -31,8 +34,11 @@ public class HtmlParser {
         return urls;
     }
 
-    public static List<String> getAllUrlsFromFile(String filePath) throws IOException {
-        return getAllUrlsFromHtmlLinesStream(Files.lines(Path.of(filePath)));
+    public static List<String> getAllUrlsFromList(List<String> htmlLines, String baseUrl) throws IOException {
+        return htmlLines.stream()
+                .map(line -> normalizeUrl(baseUrl, getFirstUrl(line)))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     public static List<String> getAllUrlsFromList(List<String> htmlLines) throws IOException {
@@ -89,5 +95,19 @@ public class HtmlParser {
     public static List<String> getAllAudioUrlsFromFile(String filePath) throws IOException {
         List<String> htmlLines = Files.readAllLines(Path.of(filePath));
         return getAllAudioUrlsFromList(htmlLines);
+    }
+
+    public static String normalizeUrl(String baseUrl, String url) {
+        if (url == null || url.isEmpty()) {
+            return null;
+        }
+        try {
+            if (url.startsWith("http://") || url.startsWith("https://")) {
+                return url;
+            }
+            return new URL(new URL(baseUrl), url).toString();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

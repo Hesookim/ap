@@ -9,6 +9,7 @@ import ap.exercises.ex5.utils.ObjectCounter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,9 +60,10 @@ public class HtmlAnalyzer {
         }
 
         try {
-            Files.write(Path.of("image_links.txt"), imageLinks);
-            Files.write(Path.of("audio_links.txt"), audioLinks);
-            System.out.println("Media links saved.");
+            Path basePath = Paths.get(Conf.SAVE_DIRECTORY);
+            Files.write(basePath.resolve("image_links.txt"), imageLinks);
+            Files.write(basePath.resolve("audio_links.txt"), audioLinks);
+            System.out.println("Media links saved in " + Conf.SAVE_DIRECTORY);
         } catch (IOException e) {
             System.err.println("Error writing media link files: " + e.getMessage());
         }

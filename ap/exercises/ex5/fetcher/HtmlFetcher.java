@@ -1,8 +1,10 @@
 package ap.exercises.ex5.fetcher;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,15 +12,15 @@ public class HtmlFetcher {
 
     public static List<String> fetchHtml(String urlAddress) throws IOException {
         System.out.println("Going to fetch "+urlAddress+" ...");
-        URL pageLocation = new URL(urlAddress);
-        Scanner in = new Scanner(pageLocation.openStream());
+        HttpURLConnection connection = (HttpURLConnection) new URL(urlAddress).openConnection();
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+        connection.setInstanceFollowRedirects(true);
 
-        List<String> htmlLines=new ArrayList<>();
-        while (in.hasNext()){
-            htmlLines.add(in.next());
+        try (InputStream input = connection.getInputStream();
+             Scanner scanner = new Scanner(input)) {
+            scanner.useDelimiter("\\A");
+            String content = scanner.hasNext() ? scanner.next() : "";
+            return Arrays.asList(content.split("\\r?\\n"));
         }
-        in.close();
-        System.out.println(urlAddress+" fetched.");
-        return htmlLines;
     }
 }
