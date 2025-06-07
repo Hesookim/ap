@@ -47,7 +47,7 @@ public class DomainHtmlScraper {
             if (visitedUrls.contains(url) || !isInDomain(url)) continue;
 
             try {
-                Thread.sleep(Conf.DOWNLOAD_DELAY_MS); // Add delay
+                Thread.sleep(Conf.DOWNLOAD_DELAY_MS); // Added delay
                 htmlLines = HtmlFetcher.fetchHtml(url);
                 processPage(htmlLines, url);
             } catch (Exception e) {
