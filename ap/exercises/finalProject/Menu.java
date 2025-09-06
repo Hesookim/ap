@@ -442,7 +442,6 @@ public class Menu {
         }
     }
 
-
     public void showManagerMenu() {
         while (true) {
             System.out.println("Managers Menu: ");
