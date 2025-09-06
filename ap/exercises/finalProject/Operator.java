@@ -36,7 +36,7 @@ public class Operator extends User {
         this.registered = true;
     }
 
-    private void setRealPassword(String password) {
+    private void setRealPassword(String password) {// <-------
         super.validPassword(password);
         super.setNewPassword(password);
     }
