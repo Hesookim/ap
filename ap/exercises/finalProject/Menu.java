@@ -333,7 +333,7 @@ public class Menu {
     private void showStudentMenu(Student st) {
         while (true) {
             System.out.println("Students Menu: ");
-            System.out.println("1) Search book");
+            System.out.println("1) Search book");// <--
             System.out.println("2) Request borrow");
             System.out.println("3) Request return");
             System.out.println("4) My active loans");
@@ -405,27 +405,35 @@ public class Menu {
         }
     }
 
-    private void searchBookMenu() {
-        System.out.println("Search for a Book");
-        System.out.println("1. By Title");
-        System.out.println("2. By Author");
-        System.out.print("Choose an option from above: ");
+    private void searchBookMenu() {// <-----
+        System.out.println("Search for a Book (leave blank to skip a field)");
 
-        int option = scanner.nextInt();
-        scanner.nextLine();
+        System.out.print("Title: ");
+        String title = scanner.nextLine().trim();
+        if (title.isEmpty()) title = null;
 
-        System.out.print("Enter your search term: ");
-        String search = scanner.nextLine().toLowerCase();
+        System.out.print("Author: ");
+        String author = scanner.nextLine().trim();
+        if (author.isEmpty()) author = null;
 
-        List<Book> found = new ArrayList<>();
-
-        for (Book book : library.getBookList()) {
-            if (option == 1 && book.getTitle().toLowerCase().contains(search)) {
-                found.add(book);
-            } else if (option == 2 && book.getAuthor().toLowerCase().contains(search)) {
-                found.add(book);
+        System.out.print("Year of publication: ");
+        String yearInput = scanner.nextLine().trim();
+        Integer year = null;
+        if (!yearInput.isEmpty()) {
+            try {
+                year = Integer.parseInt(yearInput);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid year input. Ignoring year filter.");
             }
         }
+
+        System.out.print("Only available books? (y/n, leave blank for any): ");
+        String availInput = scanner.nextLine().trim();
+        Boolean available = null;
+        if (availInput.equalsIgnoreCase("y")) available = true;
+        else if (availInput.equalsIgnoreCase("n")) available = false;
+
+        List<Book> found = library.searchBooks(title, author, year, available);
 
         if (found.isEmpty()) {
             System.out.println("No books found.");
@@ -437,7 +445,8 @@ public class Menu {
                         ", Year: " + book.getYear() +
                         ", Pages: " + book.getPages() +
                         ", Copies: " + book.getCopies() +
-                        ", ISBN: " + book.getISBN());
+                        ", ISBN: " + book.getISBN() +
+                        ", Available: " + (book.isAvailable() ? "Yes" : "No"));
             }
         }
     }

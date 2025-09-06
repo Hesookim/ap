@@ -1,4 +1,4 @@
-package ap.exercises.Project;
+package ap.exercises.finalProject;
 
 public class Book {
     private String title;
@@ -20,6 +20,16 @@ public class Book {
         updateAvailability();
     }
 
+    public Book() {
+        this.title = "";
+        this.author = "";
+        this.year = 0;
+        this.pages = 0;
+        this.copies = 0;
+        this.ISBN = "";
+        this.isAvailable = false;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -39,7 +49,7 @@ public class Book {
     public int getCopies() {
         return copies;
     }
-    
+
     public String getISBN() { return ISBN; }
 
     public void setTitle(String title) {
@@ -48,7 +58,7 @@ public class Book {
     }
 
     public void setAuthor(String author) {
-       validAuthor(author);
+        validAuthor(author);
         this.author = author;
     }
 
@@ -67,18 +77,18 @@ public class Book {
         this.copies = copies;
         updateAvailability();
     }
-    
-        public void setISBN(String ISBN) {
+
+    public void setISBN(String ISBN) {
         validISBN(ISBN);
         this.ISBN = ISBN;
     }
 
     private void validBookData(String title, String author, int year, int pages, int copies,  String ISBN) {
-            validTitle(title);
-            validAuthor(author);
-            validYear(year);
-            validPages(pages);
-            validCopies(copies);
+        validTitle(title);
+        validAuthor(author);
+        validYear(year);
+        validPages(pages);
+        validCopies(copies);
     }
 
     public boolean isAvailable() {
@@ -115,12 +125,12 @@ public class Book {
             throw new IllegalArgumentException("copies must be greater than 0!");
         }
     }
-    
+
     public void validISBN(String ISBN) {
         if (ISBN == null || ISBN.isEmpty()) {
             throw new IllegalArgumentException("ISBN cannot be null or empty!");
         }
-        
+
         else if (ISBN.length() < 13) { // Based on current international standards
             throw new IllegalArgumentException("ISBN must be greater than 13 characters!");
         }
