@@ -1,11 +1,19 @@
 package ap.exercises.finalProject;
 
 import ap.exercises.finalProject.utils.HashUtil;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public abstract class User {
+    @JsonProperty
     private String firstName;
+
+    @JsonProperty
     private String lastName;
+
+    @JsonProperty
     private int id;
+
+    @JsonProperty
     private String password;
 
     protected User(String firstName, String lastName, int id, String password) {
@@ -20,10 +28,10 @@ public abstract class User {
     }
 
     public User() {
-        this.firstName = "";
-        this.lastName = "";
+        this.firstName = null;
+        this.lastName = null;
         this.id = 0;
-        this.password = "";
+        this.password = null;
     }
 
     public String getFirstName() {
