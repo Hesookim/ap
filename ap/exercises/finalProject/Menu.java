@@ -11,7 +11,7 @@ public class Menu {
     private Library library;
     private final FileHandler fh;
 
-    public Menu(Library library,  FileHandler fh) {
+    public Menu(Library library, FileHandler fh) {
         this.library = library;
         this.fh = fh;
     }
@@ -81,8 +81,11 @@ public class Menu {
                     break;
 
                 case 4:
-                    try { fh.saveAll(library); }
-                    catch (Exception e) { System.err.println("Error saving library data: " + e.getMessage()); }
+                    try {
+                        fh.saveAll(library);
+                    } catch (Exception e) {
+                        System.err.println("Error saving library data: " + e.getMessage());
+                    }
                     return;
 
                 default:
@@ -237,8 +240,11 @@ public class Menu {
                     break;
 
                 case 6:
-                    try { fh.saveAll(library); }
-                    catch (Exception e) { System.err.println("Error saving library data: " + e.getMessage()); }
+                    try {
+                        fh.saveAll(library);
+                    } catch (Exception e) {
+                        System.err.println("Error saving library data: " + e.getMessage());
+                    }
                     return;
 
                 default:
@@ -386,16 +392,19 @@ public class Menu {
                     break;
 
                 case 4:
-                    listLoans (library.getActiveLoansForStudent(st.getId()));
+                    listLoans(library.getActiveLoansForStudent(st.getId()));
                     break;
 
                 case 5:
-                    listLoans (library.getLoanHistoryForStudent(st.getId()));
+                    listLoans(library.getLoanHistoryForStudent(st.getId()));
                     break;
 
                 case 6:
-                    try { fh.saveAll(library); }
-                    catch (Exception e) { System.err.println("Error saving library data: " + e.getMessage()); }
+                    try {
+                        fh.saveAll(library);
+                    } catch (Exception e) {
+                        System.err.println("Error saving library data: " + e.getMessage());
+                    }
                     return;
 
                 default:
@@ -502,17 +511,20 @@ public class Menu {
                     System.out.println("Which operator would you like to get returned counts for? (write the operator's ID)");
                     int rIndex = scanner.nextInt();
                     library.getReturnCountForOperator(rIndex);
-                    int  returnCount = library.getReturnCountForOperator(rIndex);
+                    int returnCount = library.getReturnCountForOperator(rIndex);
                     System.out.println("Return count for operator " + rIndex + ": " + returnCount);
                     break;
 
 
                 case 5:
-                    try { fh.saveAll(library); }
-                    catch (Exception e) { System.err.println("Error saving library data: " + e.getMessage()); }
+                    try {
+                        fh.saveAll(library);
+                    } catch (Exception e) {
+                        System.err.println("Error saving library data: " + e.getMessage());
+                    }
                     return;
 
-                default :
+                default:
                     System.out.println("invalid choice! please try again!");
             }
         }
