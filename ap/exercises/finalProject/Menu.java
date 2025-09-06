@@ -215,7 +215,7 @@ public class Menu {
 
             switch (choice) {
                 case 1:
-                    addBookAsOperator();
+                    addBookAsOperator();// <------
                     break;
 
                 case 2:
