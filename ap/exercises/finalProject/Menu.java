@@ -311,8 +311,7 @@ public class Menu {
                             Book book = results.get(i);
                             System.out.println((i + 1) + ". " + book.getTitle() +
                                     " by " + book.getAuthor() +
-                                    " (" + book.getYear() + ")" +
-                                    " - Available: " + (book.isAvailable() ? "Yes" : "No"));
+                                    " (" + book.getYear() + ")");
                         }
                     }
 
