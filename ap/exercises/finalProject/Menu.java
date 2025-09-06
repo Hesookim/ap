@@ -255,7 +255,7 @@ public class Menu {
                     System.out.println("Your ID and password updated successfully!");
                     break;
 
-                case 7:
+                case 7:// <-------
                     System.out.print("Enter student ID to modify: ");
                     int studentId = Integer.parseInt(scanner.nextLine());
                     Student student = library.findStudent(studentId);
