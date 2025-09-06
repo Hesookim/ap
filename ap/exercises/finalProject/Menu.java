@@ -219,7 +219,7 @@ public class Menu {
                     break;
 
                 case 2:
-                    System.out.print("Pending-borrow index: ");
+                    System.out.print("Pending-borrow index: ");//<-----
                     int idx = scanner.nextInt();
                     library.confirmBorrow(idx, operator);
                     break;
