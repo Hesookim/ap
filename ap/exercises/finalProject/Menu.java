@@ -224,7 +224,7 @@ public class Menu {
                     library.confirmBorrow(idx, operator);
                     break;
 
-                case 3:
+                case 3:// <---
                     System.out.print("Pending-return index: ");
                     int rIdx = scanner.nextInt();
                     library.confirmReturn(rIdx, operator);
