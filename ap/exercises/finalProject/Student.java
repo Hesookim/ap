@@ -35,6 +35,15 @@ public class Student extends User {
         }
     }
 
+    public void updatePassword(String currentPassword, String newPassword) {
+        setPassword(currentPassword, newPassword);
+    }
+
+    public void updateFullName(String newFirstName, String newLastName) {
+        setFirstName(newFirstName);
+        setLastName(newLastName);
+    }
+
     public boolean isActive() { return active; }
 
     public void setActive(boolean active) { this.active = active; }
