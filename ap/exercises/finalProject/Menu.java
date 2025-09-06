@@ -20,7 +20,7 @@ public class Menu {
         while (true) {
             System.out.println("\nLibrary Management");
             System.out.println("=========================");
-            System.out.println("1. Sign in/ Sign up");
+            System.out.println("1. Sign in/ Sign up");// <-- Sign in
             System.out.println("2. Guest Menu");
             System.out.println("3. Exit");
             System.out.println("=========================");
@@ -57,7 +57,7 @@ public class Menu {
     public void showSignInMenu() {
         while (true) {
             System.out.println("===========================");
-            System.out.println("1. Sign in as student");
+            System.out.println("1. Sign in as student");// <--
             System.out.println("2. Sign in as manager");
             System.out.println("3. Sign in as operator");
             System.out.println("4. return");
