@@ -127,7 +127,7 @@ public class Library {
         return operatorList.get(idx);
     }
 
-    public void requestBorrow(int studentId, String isbn) {
+    public void requestBorrow(int studentId, String isbn) { // <-----
         Student s = findStudent(studentId);
         Book b = findBook(isbn);
         if (b == null || !b.isAvailable()) {
@@ -156,11 +156,11 @@ public class Library {
         System.out.println("Loan confirmed: " + loan);
     }
 
-    public void requestReturn(int studentId, String isbn) {
+    public void requestReturn(int studentId, String isbn) { // <----
         BorrowBook loan = findActiveLoan(studentId, isbn);
         if (loan == null) return;
         pendingReturn.add(loan);
-        System.out.println("Return stored. A librarian must confirm it.");
+        System.out.println("Return stored. A operator must confirm it.");
     }
 
     public void confirmReturn(int pendingIndex, Operator receiver) {
