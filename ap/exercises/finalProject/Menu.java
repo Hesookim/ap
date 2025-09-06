@@ -589,7 +589,7 @@ public class Menu {
                         System.out.println("You must be signed in as a manager to view statistics!");
                         break;
                     }
-                    manager.printStudentStatistics(library);
+                    manager.printStudentStatistics(library);// <--------
                     break;
 
 
