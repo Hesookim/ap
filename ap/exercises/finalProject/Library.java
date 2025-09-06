@@ -1,6 +1,7 @@
 package ap.exercises.finalProject;
 
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +10,8 @@ public class Library {
     private List<Book> bookList;
     private List<Student> studentList;
     private List<Operator> operatorList;
-    private final Operator operator1;
-    private final Operator operator2;
     private List<BorrowBook> borrowBookList;
+    @JsonManagedReference
     private Manager manager;
     private User currentUser;
 
@@ -28,12 +28,6 @@ public class Library {
         studentList = new ArrayList<>();
         borrowBookList = new ArrayList<>();
         operatorList = new ArrayList<>();
-
-        operator1 = new Operator("Operator", "One", 39876453, "@hduekfkf");
-        operator2 = new Operator("Operator", "Two", 39876454, "hwjc&kkpqo");
-
-        operatorList.add(operator1);
-        operatorList.add(operator2);
     }
 
     public Manager getManager() {
@@ -55,7 +49,7 @@ public class Library {
     }
 
     public boolean signInAsManager(int userId, String password){
-        if (manager != null && manager.getId() == userId && manager.authenticate(password) && manager.verifyManager()) {
+        if (manager != null && manager.getId() == userId && manager.authenticate(password)) {
             currentUser = manager;
             return true;
         }
@@ -163,6 +157,14 @@ public class Library {
         System.out.println("Return stored. A operator must confirm it.");
     }
 
+    public void returnBook(BorrowBook borrowBook, Operator operator) {
+        if (borrowBook.isReturned()) {
+            System.out.println("This book has already been returned!");
+            return;
+        }
+        borrowBook.confirmReturn(operator, LocalDate.now());
+    }
+
     public void confirmReturn(int pendingIndex, Operator receiver) {
         BorrowBook loan = pendingReturn.remove(pendingIndex);
         if (receiver == null) receiver = getRandomOperator();
@@ -195,33 +197,6 @@ public class Library {
 
     public List<BorrowBook> getLoansOfStudent(int studentId) {
         return getLoanHistoryForStudent(studentId);
-    }
-
-    public List<Book> getTopBorrowedBooksLastYear(int topN) {
-        int currentYear = Year.now().getValue();
-        List<Book> books = new ArrayList<>();
-        List<Integer> counts = new ArrayList<>();
-
-        for (BorrowBook bb : borrowBookList) {
-            if (bb.getBorrowDate().getYear() >= currentYear - 1) {
-                Book bk = bb.getBook();
-                int idx = books.indexOf(bk);
-                if (idx == -1) { books.add(bk); counts.add(1); }
-                else counts.set(idx, counts.get(idx) + 1);
-            }
-        }
-
-        List<Book> result = new ArrayList<>();
-        for (int k = 0; k < topN && !books.isEmpty(); k++) {
-            int maxIdx = 0;
-            for (int i = 1; i < counts.size(); i++)
-                if (counts.get(i) > counts.get(maxIdx)) maxIdx = i;
-
-            result.add(books.get(maxIdx));
-            books.remove(maxIdx);
-            counts.remove(maxIdx);
-        }
-        return result;
     }
 
     public List<BorrowBook> getLoansHandledByLibrarian(int librarianId) {
@@ -349,6 +324,30 @@ public class Library {
         return null;
     }
 
+    public int getTotalBorrowedByStudent(Student s) {
+        return (int) borrowBookList.stream()
+                .filter(bb -> bb.getStudent().equals(s))
+                .count();
+    }
+
+    public int getTotalLateReturnsByStudent(Student s) {
+        return (int) borrowBookList.stream()
+                .filter(bb -> bb.getStudent().equals(s))
+                .filter(BorrowBook::isReturned)
+                .filter(bb -> bb.getReturnedDate().isAfter(bb.getDueDate()))
+                .count();
+    }
+
+    public List<Student> getTop10LateStudents() {
+        return studentList.stream()
+                .sorted((s1, s2) -> Integer.compare(
+                        getTotalLateReturnsByStudent(s2),
+                        getTotalLateReturnsByStudent(s1)
+                ))
+                .limit(10)
+                .toList();
+    }
+
     public void requestBorrow(int studentId, String isbn, LocalDate startDate, LocalDate endDate) {
         Student s = findStudent(studentId);
 
@@ -370,5 +369,9 @@ public class Library {
         BorrowBook loan = new BorrowBook(b, s, startDate, endDate);
         pendingBorrow.add(loan);
         System.out.println("Request stored. A librarian must approve it.");
+    }
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
     }
 }

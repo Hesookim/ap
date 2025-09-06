@@ -189,6 +189,7 @@ public class Menu {
 
         if (operator.getId() == id && operator.authenticate(password)) {
             System.out.println("Operator signed in successfully!");
+            library.setCurrentUser(operator);
             showOperatorMenu(operator);
         } else {
             System.out.println("Invalid ID or password.");
@@ -204,7 +205,9 @@ public class Menu {
             System.out.println("3. Confirm return");
             System.out.println("4. Get students loan history");
             System.out.println("5. Get all handed loans");
-            System.out.println("6. Return to main menu");
+            System.out.println("6. Complete registration");
+            System.out.println("7. Update students activation state");
+            System.out.println("8. Return to main menu");
             System.out.println("==========================");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -240,6 +243,35 @@ public class Menu {
                     break;
 
                 case 6:
+                    System.out.println("Update your ID and password:");
+                    System.out.print("Enter new employee ID: ");
+                    int newId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.print("Enter new password: ");
+                    String newPassword = scanner.nextLine();
+
+                    operator.completeRegistration(newId, newPassword);
+                    System.out.println("Your ID and password updated successfully!");
+                    break;
+
+                case 7:
+                    System.out.print("Enter student ID to modify: ");
+                    int studentId = Integer.parseInt(scanner.nextLine());
+                    Student student = library.findStudent(studentId);
+                    if (student == null) {
+                        System.out.println("Student not found!");
+                        break;
+                    }
+                    System.out.println("Current status: " + (student.isActive() ? "Active" : "Inactive"));
+                    System.out.print("Set active? (y/n): ");
+                    String choiceO = scanner.nextLine().trim();
+                    boolean active = choiceO.equalsIgnoreCase("y");
+                    operator.setStudentActiveStatus(student, active);
+                    System.out.println("Student status updated!");
+                    break;
+
+                case 8:
                     try {
                         fh.saveAll(library);
                     } catch (Exception e) {
@@ -343,7 +375,8 @@ public class Menu {
             System.out.println("3) Request return");
             System.out.println("4) My active loans");
             System.out.println("5) My loan history");
-            System.out.println("6) Sign-out");
+            System.out.println("6) Update your information");
+            System.out.println("7) Sign-out");
             System.out.println("===========================");
             System.out.print("Enter your choice: ");
 
@@ -356,6 +389,11 @@ public class Menu {
                     break;
 
                 case 2:
+                    if (!st.isActive()) {
+                        System.out.println("You cannot borrow books because your account is inactive.");
+                        return;
+                    }
+
                     System.out.println("Enter isbn of the book you want to borrow: ");
                     String isbn = scanner.nextLine();
 
@@ -400,6 +438,36 @@ public class Menu {
                     break;
 
                 case 6:
+                    System.out.println("Update your information:");
+                    System.out.print("New first name (leave blank to keep current): ");
+                    String firstName = scanner.nextLine().trim();
+                    if (!firstName.isEmpty()) st.updateFullName(firstName, st.getLastName());
+
+                    System.out.print("New last name (leave blank to keep current): ");
+                    String lastName = scanner.nextLine().trim();
+                    if (!lastName.isEmpty()) st.updateFullName(st.getFirstName(), lastName);
+
+                    System.out.print("New major (leave blank to keep current): ");
+                    String major = scanner.nextLine().trim();
+                    if (!major.isEmpty()) st.setMajor(major);
+
+                    System.out.print("Change password? (y/n): ");
+                    String changePass = scanner.nextLine().trim();
+                    if (changePass.equalsIgnoreCase("y")) {
+                        System.out.print("Current password: ");
+                        String currPass = scanner.nextLine();
+                        System.out.print("New password: ");
+                        String newPass = scanner.nextLine();
+                        try {
+                            st.updatePassword(currPass, newPass);
+                            System.out.println("Password updated successfully!");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Error updating password: " + e.getMessage());
+                        }
+                    }
+                    break;
+
+                case 7:
                     try {
                         fh.saveAll(library);
                     } catch (Exception e) {
@@ -467,7 +535,8 @@ public class Menu {
             System.out.println("2. Get overdue loans ");
             System.out.println("3. Get Issue Count For Operator");
             System.out.println("4. Get Return Count For Operator");
-            System.out.println("5. Return");
+            System.out.println("5. View Student Statistics");
+            System.out.println("6. Return");
             System.out.println("===========================");
             System.out.print("Enter your choice: ");
 
@@ -515,8 +584,16 @@ public class Menu {
                     System.out.println("Return count for operator " + rIndex + ": " + returnCount);
                     break;
 
-
                 case 5:
+                    if (!(library.getCurrentUser() instanceof Manager manager)) {
+                        System.out.println("You must be signed in as a manager to view statistics!");
+                        break;
+                    }
+                    manager.printStudentStatistics(library);
+                    break;
+
+
+                case 6:
                     try {
                         fh.saveAll(library);
                     } catch (Exception e) {
