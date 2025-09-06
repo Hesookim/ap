@@ -239,7 +239,7 @@ public class Menu {
                     break;
 
                 case 5:
-                    library.getLoansHandledByLibrarian(operator.getId());
+                    library.getLoansHandledByLibrarian(operator.getId());// <---
                     break;
 
                 case 6:
