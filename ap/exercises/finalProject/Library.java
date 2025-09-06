@@ -279,7 +279,7 @@ public class Library {
         return null;
     }
 
-    public List<Book> searchBooks(String title, String author, Integer year, Boolean available) {// <----
+    public List<Book> searchBooks(String title, String author, Integer year, Boolean available) {// <---- for guest
         List<Book> results = new ArrayList<>();
         for (Book book : bookList) {
             boolean matches = true;

@@ -287,7 +287,7 @@ public class Menu {
         while (true) {
             System.out.println("Guest Menu:");
             System.out.println("1. View student count"); // <---
-            System.out.println("2. Search books by title");
+            System.out.println("2. Search books by title"); // <---
             System.out.println("3. View library statistics");
             System.out.println("4. Back to main menu");
 
