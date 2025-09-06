@@ -307,7 +307,7 @@ public class Library {
         return results;
     }
 
-    public void showLibraryStats() {
+    public void showLibraryStats() {// <------- for guest
         System.out.println("Total Students: " + studentList.size());
         System.out.println("Total Books: " + bookList.size());
         System.out.println("Total Loans: " + borrowBookList.size());

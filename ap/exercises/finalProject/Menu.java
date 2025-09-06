@@ -317,7 +317,7 @@ public class Menu {
 
                     break;
                 case 3:
-                    library.showLibraryStats();
+                    library.showLibraryStats();// <------
                     break;
 
                 case 4:
